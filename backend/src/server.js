@@ -7,6 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const venueRoutes = require("./routes/venueRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/venues", venueRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.get("/", (req, res) => {
   res.json({
