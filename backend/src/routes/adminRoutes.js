@@ -1,6 +1,7 @@
 const express = require("express");
 
 const {
+  dashboardStats,
   getPendingVenues,
   updateVenueStatus,
   getPendingEvents,
@@ -20,5 +21,6 @@ router.get("/venues/pending", getPendingVenues);
 router.put("/venues/:id/status", updateVenueStatus);
 router.get("/events/pending", getPendingEvents);
 router.put("/events/:id/status", updateEventStatus);
+router.get("/dashboard", dashboardStats);
 
 module.exports = router;

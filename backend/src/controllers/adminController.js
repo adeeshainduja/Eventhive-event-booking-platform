@@ -1,4 +1,4 @@
-const { Venue, Event, User } = require("../models");
+const { Venue, Event, User, Booking, Payment } = require("../models");
 
 const getPendingVenues = async (req, res) => {
   try {
@@ -134,7 +134,53 @@ const updateEventStatus = async (req, res) => {
   }
 };
 
+const dashboardStats = async (req, res) => {
+  try {
+    const totalUsers = await User.count();
+    const totalVenues = await Venue.count();
+    const totalEvents = await Event.count();
+    const totalBookings = await Booking.count();
+    const totalPayments = await Payment.count();
+
+    const pendingVenues = await Venue.count({
+      where: { status: "pending" }
+    });
+
+    const pendingEvents = await Event.count({
+      where: { status: "pending" }
+    });
+
+    const paidPayments = await Payment.findAll({
+      where: { status: "paid" }
+    });
+
+    const totalRevenue = paidPayments.reduce((sum, payment) => {
+      return sum + Number(payment.amount);
+    }, 0);
+
+    res.json({
+      success: true,
+      stats: {
+        totalUsers,
+        totalVenues,
+        totalEvents,
+        totalBookings,
+        totalPayments,
+        pendingVenues,
+        pendingEvents,
+        totalRevenue
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 module.exports = {
+  dashboardStats,
   getPendingVenues,
   updateVenueStatus,
   getPendingEvents,

@@ -4,6 +4,8 @@ const User = require("./User");
 const Venue = require("./Venue");
 const Event = require("./Event");
 const Booking = require("./Booking");
+const Payment = require("./Payment");
+const Review = require("./Review");
 
 // User → Venue
 User.hasMany(Venue, {
@@ -60,10 +62,45 @@ Booking.belongsTo(Event, {
   as: "event"
 });
 
+// Booking → Payment
+Booking.hasOne(Payment, {
+  foreignKey: "bookingId",
+  as: "payment"
+});
+
+Payment.belongsTo(Booking, {
+  foreignKey: "bookingId",
+  as: "booking"
+});
+
+// User → Review
+User.hasMany(Review, {
+  foreignKey: "userId",
+  as: "reviews"
+});
+
+Review.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user"
+});
+
+// Event → Review
+Event.hasMany(Review, {
+  foreignKey: "eventId",
+  as: "reviews"
+});
+
+Review.belongsTo(Event, {
+  foreignKey: "eventId",
+  as: "event"
+});
+
 module.exports = {
   sequelize,
   User,
   Venue,
   Event,
-  Booking
+  Booking,
+  Payment,
+  Review
 };
