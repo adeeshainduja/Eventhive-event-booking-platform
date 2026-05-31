@@ -47,24 +47,32 @@ function App() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm font-semibold">
-            <Link to="/" className="text-slate-600 hover:text-purple-700">
-              Home
-            </Link>
+          <Link to="/" className="text-slate-600 hover:text-purple-700">
+            Home
+          </Link>
 
-            <Link to="/venues" className="text-slate-600 hover:text-purple-700">
-              Venues
-            </Link>
+          <Link to="/venues" className="text-slate-600 hover:text-purple-700">
+            Venues
+          </Link>
 
-            <Link to="/events" className="text-slate-600 hover:text-purple-700">
-              Events
-            </Link>
+          <Link to="/events" className="text-slate-600 hover:text-purple-700">
+            Events
+          </Link>
 
-            {user?.role === "admin" && (
-              <Link to="/admin" className="text-slate-600 hover:text-purple-700">
-                Admin
-              </Link>
-            )}
-          </div>
+          <a href="/#about" className="text-slate-600 hover:text-purple-700">
+            About
+          </a>
+
+          <a href="/#contact" className="text-slate-600 hover:text-purple-700">
+            Contact
+          </a>
+
+          {user?.role === "admin" && (
+            <Link to="/admin" className="text-slate-600 hover:text-purple-700">
+              Admin
+            </Link>
+          )}
+        </div>
 
           <div className="flex items-center gap-3">
             {token ? (

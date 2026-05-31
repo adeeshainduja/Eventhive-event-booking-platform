@@ -374,6 +374,182 @@ function Home() {
         </section>
       </main>
 
+             <section id="about" className="bg-white py-24">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="inline-flex px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-bold mb-5">
+                  About EventHive
+                </p>
+
+                <h2 className="text-4xl md:text-5xl font-extrabold text-slate-950 leading-tight">
+                  A Complete Platform for Event Booking and Venue Management
+                </h2>
+
+                <p className="text-slate-600 mt-6 leading-relaxed text-lg">
+                  EventHive is a modern event booking platform designed to connect
+                  customers, event organizers, venue owners, and administrators in one
+                  simple system. Users can explore events, book tickets, view venues, and
+                  manage event participation easily.
+                </p>
+
+                <p className="text-slate-600 mt-4 leading-relaxed text-lg">
+                  The platform also supports role-based access, allowing venue owners to
+                  list venues, organizers to create events, and admins to approve venues
+                  and events before they become publicly visible.
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-4 mt-8">
+                  <div className="bg-[#f8f9ff] border border-slate-200 rounded-2xl p-5">
+                    <h3 className="font-extrabold text-slate-950 mb-2">
+                      Secure Booking
+                    </h3>
+                    <p className="text-slate-500 text-sm">
+                      Users can reserve tickets through a clear and simple booking flow.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#f8f9ff] border border-slate-200 rounded-2xl p-5">
+                    <h3 className="font-extrabold text-slate-950 mb-2">
+                      Admin Approval
+                    </h3>
+                    <p className="text-slate-500 text-sm">
+                      Admins can approve or reject venues and events for better quality
+                      control.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-50 to-cyan-50 rounded-3xl border border-slate-200 p-8 shadow-xl">
+                <h3 className="text-2xl font-extrabold text-slate-950 mb-6">
+                  Platform Roles
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="bg-white rounded-2xl p-5 border border-slate-200">
+                    <h4 className="font-bold text-purple-700">Customers</h4>
+                    <p className="text-slate-500 text-sm mt-1">
+                      Browse events, book tickets, make payments, and add reviews.
+                    </p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-5 border border-slate-200">
+                    <h4 className="font-bold text-purple-700">Organizers</h4>
+                    <p className="text-slate-500 text-sm mt-1">
+                      Create events and manage event information after venue approval.
+                    </p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-5 border border-slate-200">
+                    <h4 className="font-bold text-purple-700">Venue Owners</h4>
+                    <p className="text-slate-500 text-sm mt-1">
+                      List venues with location, capacity, price, and description.
+                    </p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-5 border border-slate-200">
+                    <h4 className="font-bold text-purple-700">Admins</h4>
+                    <p className="text-slate-500 text-sm mt-1">
+                      Approve venues, approve events, and monitor dashboard statistics.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section> 
+
+          <section id="contact" className="bg-[#f8f9ff] py-24">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12">
+              <div className="text-center max-w-3xl mx-auto mb-12">
+                <p className="inline-flex px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-bold mb-5">
+                  Contact Us
+                </p>
+
+                <h2 className="text-4xl md:text-5xl font-extrabold text-slate-950">
+                  Get in Touch with EventHive
+                </h2>
+
+                <p className="text-slate-600 mt-5 text-lg">
+                  Have a question about events, venues, bookings, or platform access?
+                  Contact our support team.
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-3 gap-7">
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-7">
+                  <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center mb-5">
+                    <span className="material-symbols-outlined">mail</span>
+                  </div>
+                  <h3 className="text-xl font-extrabold text-slate-950 mb-2">
+                    Email Support
+                  </h3>
+                  <p className="text-slate-500">support@eventhive.io</p>
+                  <p className="text-slate-500">eventhive.help@gmail.com</p>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-7">
+                  <div className="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center mb-5">
+                    <span className="material-symbols-outlined">call</span>
+                  </div>
+                  <h3 className="text-xl font-extrabold text-slate-950 mb-2">
+                    Phone Number
+                  </h3>
+                  <p className="text-slate-500">+94 77 123 4567</p>
+                  <p className="text-slate-500">+94 71 987 6543</p>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-7">
+                  <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center mb-5">
+                    <span className="material-symbols-outlined">location_on</span>
+                  </div>
+                  <h3 className="text-xl font-extrabold text-slate-950 mb-2">
+                    Office Location
+                  </h3>
+                  <p className="text-slate-500">Colombo, Sri Lanka</p>
+                  <p className="text-slate-500">Available Monday - Friday</p>
+                </div>
+              </div>
+
+              <div className="mt-10 bg-white rounded-3xl border border-slate-200 shadow-xl p-8 grid lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-2xl font-extrabold text-slate-950 mb-3">
+                    Send a Message
+                  </h3>
+                  <p className="text-slate-500">
+                    Fill this form and our team will contact you soon.
+                  </p>
+                </div>
+
+                <form className="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+
+                  <textarea
+                    rows="4"
+                    placeholder="Your message"
+                    className="w-full px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+
+                  <button
+                    type="button"
+                    className="px-7 py-3 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-500 text-white font-bold shadow-md"
+                  >
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+
       <footer id="contact" className="bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-14 grid md:grid-cols-4 gap-10">
           <div>
