@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 
+const EVENT_FALLBACK_IMAGE =
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30";
+
+const VENUE_FALLBACK_IMAGE =
+  "https://images.unsplash.com/photo-1519167758481-83f550bb49b3";
+
 const featuredEvents = [
   {
+    id: 1,
     title: "Tech Innovation Summit 2026",
     category: "Technology",
     date: "Oct 12, 2026",
@@ -11,6 +18,7 @@ const featuredEvents = [
       "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
   },
   {
+    id: 2,
     title: "Music Night Colombo",
     category: "Music",
     date: "Nov 05, 2026",
@@ -20,18 +28,20 @@ const featuredEvents = [
       "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=900&q=80",
   },
   {
+    id: 3,
     title: "Startup Networking Meetup",
     category: "Networking",
     date: "Dec 15, 2026",
     location: "Innovation Hub",
     price: "Free",
     image:
-      "https://images.unsplash.com/photo-1515169067865-5387ec356754?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1515169067868-5387ec356754",
   },
 ];
 
 const venues = [
   {
+    id: 1,
     name: "Colombo Grand Hall",
     capacity: "500+ Capacity",
     price: "From LKR 150,000 / Day",
@@ -40,6 +50,7 @@ const venues = [
       "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80",
   },
   {
+    id: 2,
     name: "Ocean View Conference Center",
     capacity: "200+ Capacity",
     price: "From LKR 95,000 / Day",
@@ -48,6 +59,7 @@ const venues = [
       "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
   },
   {
+    id: 3,
     name: "Lotus Event Arena",
     capacity: "2000+ Capacity",
     price: "From LKR 300,000 / Day",
@@ -247,19 +259,23 @@ function Home() {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-stretch auto-rows-fr">
             {featuredEvents.map((event) => (
               <div
                 key={event.title}
-                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition"
+                className="h-full flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition"
               >
                 <img
-                  src={event.image}
+                  src={event.image || EVENT_FALLBACK_IMAGE}
                   alt={event.title}
                   className="h-52 w-full object-cover"
+                  onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = EVENT_FALLBACK_IMAGE;
+                  }}
                 />
 
-                <div className="p-5">
+                <div className="p-5 flex flex-col flex-1">
                   <div className="flex justify-between items-center mb-4">
                     <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
                       {event.category}
@@ -278,9 +294,14 @@ function Home() {
                     <p>📍 {event.location}</p>
                   </div>
 
-                  <button className="w-full py-3 rounded-xl border border-purple-700 text-purple-700 font-bold hover:bg-purple-700 hover:text-white transition">
-                    View Details
-                  </button>
+                  <div className="mt-auto">
+                    <Link
+                      to={`/events/${event.id}`}
+                      className="block text-center w-full py-3 rounded-xl border border-purple-700 text-purple-700 font-bold hover:bg-purple-700 hover:text-white transition"
+                    >
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -288,46 +309,59 @@ function Home() {
         </section>
 
         <section className="bg-white py-24">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2 className="text-3xl font-extrabold text-slate-950">
-              Popular Venues
-            </h2>
-            <p className="text-slate-500 mt-2 mb-10">
-              The most sought-after spaces for your next big event.
-            </p>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <h2 className="text-3xl font-extrabold text-slate-950">
+            Popular Venues
+          </h2>
 
-            <div className="grid md:grid-cols-3 gap-7">
-              {venues.map((venue) => (
-                <div
-                  key={venue.name}
-                  className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md"
-                >
-                  <div className="relative">
-                    <img
-                      src={venue.image}
-                      alt={venue.name}
-                      className="h-56 w-full object-cover"
-                    />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl text-sm font-bold">
-                      ⭐ {venue.rating}
-                    </div>
-                  </div>
+          <p className="text-slate-500 mt-2 mb-10">
+            The most sought-after spaces for your next big event.
+          </p>
 
-                  <div className="p-5">
-                    <h3 className="text-xl font-bold text-slate-950 mb-3">
-                      {venue.name}
-                    </h3>
-                    <div className="space-y-2 text-sm text-slate-500">
-                      <p>👥 {venue.capacity}</p>
-                      <p>💳 {venue.price}</p>
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-stretch auto-rows-fr">
+            {venues.map((venue) => (
+              <div
+                key={venue.id}
+                className="h-full flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md"
+              >
+                <div className="relative shrink-0">
+                  <img
+                    src={venue.image || VENUE_FALLBACK_IMAGE}
+                    alt={venue.name}
+                    className="h-56 w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = VENUE_FALLBACK_IMAGE;
+                    }}
+                  />
+
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-xl text-sm font-bold">
+                    ⭐ {venue.rating}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-xl font-bold text-slate-950 mb-3">
+                    {venue.name}
+                  </h3>
+
+                  <div className="space-y-2 text-sm text-slate-500">
+                    <p>👥 {venue.capacity}</p>
+                    <p>💳 {venue.price}</p>
+                  </div>
+
+                  <Link
+                    to={`/venues/${venue.id}`}
+                    className="block text-center w-full mt-auto py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800 transition"
+                  >
+                    View Venue
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
         <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
           <h2 className="text-3xl font-extrabold text-center mb-14">
             How EventHive Works

@@ -1,59 +1,30 @@
-const venues = [
-  {
-    id: 1,
-    name: "Colombo Grand Hall",
-    location: "Colombo, Sri Lanka",
-    capacity: 500,
-    pricePerDay: "LKR 150,000",
-    rating: 4.9,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A premium event hall suitable for weddings, conferences, exhibitions, and corporate events.",
-  },
-  {
-    id: 2,
-    name: "Ocean View Conference Center",
-    location: "Galle Face, Colombo",
-    capacity: 250,
-    pricePerDay: "LKR 95,000",
-    rating: 4.8,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A modern conference center with ocean views, ideal for business meetings and seminars.",
-  },
-  {
-    id: 3,
-    name: "Lotus Event Arena",
-    location: "Battaramulla, Sri Lanka",
-    capacity: 2000,
-    pricePerDay: "LKR 300,000",
-    rating: 5.0,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A large-scale event arena designed for concerts, expos, cultural shows, and major events.",
-  },
-  {
-    id: 4,
-    name: "Royal Banquet Hall",
-    location: "Kandy, Sri Lanka",
-    capacity: 400,
-    pricePerDay: "LKR 120,000",
-    rating: 4.7,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=900&q=80",
-    description:
-      "Elegant banquet hall with luxury interior design for weddings and formal celebrations.",
-  },
-];
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { DEFAULT_VENUE_IMAGE, venues } from "../data/venues";
 
 function Venues() {
+  const [venueSearch, setVenueSearch] = useState("");
+  const [locationText, setLocationText] = useState("");
+  const [capacityRange, setCapacityRange] = useState("");
+
+  const filteredVenues = venues.filter((venue) => {
+    const nameMatches = venue.name
+      .toLowerCase()
+      .includes(venueSearch.trim().toLowerCase());
+    const locationMatches = venue.location
+      .toLowerCase()
+      .includes(locationText.trim().toLowerCase());
+    const capacityMatches =
+      capacityRange === "" ||
+      (capacityRange === "0-250" && venue.capacity <= 250) ||
+      (capacityRange === "250-500" &&
+        venue.capacity > 250 &&
+        venue.capacity <= 500) ||
+      (capacityRange === "500+" && venue.capacity > 500);
+
+    return nameMatches && locationMatches && capacityMatches;
+  });
+
   return (
     <main className="bg-[#f8f9ff] min-h-screen">
       <section className="relative overflow-hidden px-6 lg:px-12 py-20">
@@ -79,23 +50,34 @@ function Venues() {
 
           <div className="mt-10 bg-white rounded-3xl shadow-xl border border-slate-200 p-5 grid md:grid-cols-4 gap-4">
             <input
+              value={venueSearch}
+              onChange={(event) => setVenueSearch(event.target.value)}
               className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Search venue name"
             />
 
             <input
+              value={locationText}
+              onChange={(event) => setLocationText(event.target.value)}
               className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Location"
             />
 
-            <select className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500">
-              <option>Capacity</option>
-              <option>0 - 250</option>
-              <option>250 - 500</option>
-              <option>500+</option>
+            <select
+              value={capacityRange}
+              onChange={(event) => setCapacityRange(event.target.value)}
+              className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">Capacity</option>
+              <option value="0-250">0 - 250</option>
+              <option value="250-500">250 - 500</option>
+              <option value="500+">500+</option>
             </select>
 
-            <button className="py-3 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-500 text-white font-bold shadow-md hover:opacity-90">
+            <button
+              type="button"
+              className="py-3 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-500 text-white font-bold shadow-md hover:opacity-90"
+            >
               Search Venue
             </button>
           </div>
@@ -118,69 +100,89 @@ function Venues() {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {venues.map((venue) => (
-            <div
-              key={venue.id}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition"
-            >
-              <div className="relative">
-                <img
-                  src={venue.image}
-                  alt={venue.name}
-                  className="h-56 w-full object-cover"
-                />
+        {filteredVenues.length === 0 ? (
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10 text-center">
+            <h3 className="text-2xl font-extrabold text-slate-950">
+              No venues found.
+            </h3>
+            <p className="text-slate-500 mt-2">
+              Try another venue name, location, or capacity range.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 items-stretch auto-rows-fr">
+            {filteredVenues.map((venue) => (
+              <div
+                key={venue.id}
+                className="h-full flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition"
+              >
+                <div className="relative shrink-0">
+                  <img
+                    src={venue.image || DEFAULT_VENUE_IMAGE}
+                    alt={venue.name}
+                    className="h-56 w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = DEFAULT_VENUE_IMAGE;
+                    }}
+                  />
 
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
-                  {venue.status}
+                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                    {venue.status}
+                  </div>
+
+                  <div className="absolute top-4 right-4 px-3 py-1 rounded-xl bg-white/90 backdrop-blur-md text-sm font-bold">
+                    Rating {venue.rating}
+                  </div>
                 </div>
 
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-xl bg-white/90 backdrop-blur-md text-sm font-bold">
-                  ⭐ {venue.rating}
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="text-xl font-extrabold text-slate-950">
+                    {venue.name}
+                  </h3>
+
+                  <p className="text-slate-500 text-sm mt-2">
+                    {venue.description}
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
+                    <div className="bg-slate-50 rounded-2xl p-3">
+                      <p className="text-slate-400 font-semibold">Location</p>
+                      <p className="font-bold text-slate-700">
+                        {venue.location}
+                      </p>
+                    </div>
+
+                    <div className="bg-slate-50 rounded-2xl p-3">
+                      <p className="text-slate-400 font-semibold">Capacity</p>
+                      <p className="font-bold text-slate-700">
+                        {venue.capacity} people
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto flex items-center justify-between gap-4 pt-6">
+                    <div>
+                      <p className="text-slate-400 text-sm font-semibold">
+                        Price per day
+                      </p>
+                      <p className="text-purple-700 font-extrabold">
+                        {venue.pricePerDay}
+                      </p>
+                    </div>
+
+                    <Link
+                      to={`/venues/${venue.id}`}
+                      className="shrink-0 px-5 py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800"
+                    >
+                      View Venue
+                    </Link>
+                  </div>
                 </div>
               </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-extrabold text-slate-950">
-                  {venue.name}
-                </h3>
-
-                <p className="text-slate-500 text-sm mt-2">
-                  {venue.description}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Location</p>
-                    <p className="font-bold text-slate-700">{venue.location}</p>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Capacity</p>
-                    <p className="font-bold text-slate-700">
-                      {venue.capacity} people
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-6">
-                  <div>
-                    <p className="text-slate-400 text-sm font-semibold">
-                      Price per day
-                    </p>
-                    <p className="text-purple-700 font-extrabold">
-                      {venue.pricePerDay}
-                    </p>
-                  </div>
-
-                  <button className="px-5 py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800">
-                    View Venue
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

@@ -1,26 +1,31 @@
 import { Link, useParams } from "react-router-dom";
-
-const event = {
-  id: 1,
-  title: "Tech Innovation Summit 2026",
-  category: "Technology",
-  date: "2026-06-15",
-  time: "09:30 AM",
-  venue: "Colombo Grand Hall",
-  location: "Colombo, Sri Lanka",
-  ticketPrice: "LKR 2,500",
-  availableTickets: 300,
-  totalTickets: 500,
-  organizer: "EventHive Tech Community",
-  status: "Approved",
-  image:
-    "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80",
-  description:
-    "Tech Innovation Summit 2026 is a technology event designed for students, software engineers, developers, startup founders, and technology enthusiasts. The event covers AI, cloud computing, software engineering, data engineering, cybersecurity, and modern product development.",
-};
+import { DEFAULT_EVENT_IMAGE, events } from "../data/events";
 
 function EventDetails() {
   const { id } = useParams();
+  const event = events.find((item) => item.id === Number(id));
+
+  if (!event) {
+    return (
+      <main className="min-h-screen bg-[#f8f9ff] px-6 lg:px-12 py-20">
+        <div className="max-w-3xl mx-auto bg-white rounded-3xl border border-slate-200 shadow-xl p-10 text-center">
+          <h1 className="text-4xl font-extrabold text-slate-950">
+            Event not found
+          </h1>
+          <p className="text-slate-500 mt-3">
+            The event you are looking for may have been removed or does not
+            exist.
+          </p>
+          <Link
+            to="/events"
+            className="inline-flex mt-7 px-6 py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800"
+          >
+            Back to Events
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#f8f9ff]">
@@ -33,15 +38,19 @@ function EventDetails() {
             to="/events"
             className="inline-flex items-center text-purple-700 font-bold mb-8"
           >
-            ← Back to Events
+            Back to Events
           </Link>
 
           <div className="grid lg:grid-cols-2 gap-10 items-start">
             <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
               <img
-                src={event.image}
+                src={event.image || DEFAULT_EVENT_IMAGE}
                 alt={event.title}
                 className="w-full h-[430px] object-cover"
+                onError={(imageEvent) => {
+                  imageEvent.currentTarget.onerror = null;
+                  imageEvent.currentTarget.src = DEFAULT_EVENT_IMAGE;
+                }}
               />
             </div>
 
@@ -61,7 +70,7 @@ function EventDetails() {
               </h1>
 
               <p className="mt-5 text-slate-600 leading-relaxed">
-                {event.description}
+                {event.details}
               </p>
 
               <div className="grid grid-cols-2 gap-4 mt-8">
@@ -136,10 +145,7 @@ function EventDetails() {
               </h2>
 
               <p className="text-slate-600 leading-relaxed">
-                This event brings together technology experts, university
-                students, startup founders, software engineers, and industry
-                professionals. Attendees can learn from keynote sessions, panel
-                discussions, hands-on demonstrations, and networking activities.
+                {event.description}
               </p>
 
               <div className="grid md:grid-cols-3 gap-4 mt-8">
@@ -161,7 +167,7 @@ function EventDetails() {
 
                 <div className="bg-slate-50 rounded-2xl p-4">
                   <p className="text-sm text-slate-400 font-bold">Event ID</p>
-                  <p className="font-bold text-slate-800">#{id}</p>
+                  <p className="font-bold text-slate-800">#{event.id}</p>
                 </div>
               </div>
             </div>
@@ -172,11 +178,10 @@ function EventDetails() {
               </h2>
 
               <ul className="space-y-4 text-slate-600">
-                <li>✅ Learn modern technology trends</li>
-                <li>✅ Meet developers and startup founders</li>
-                <li>✅ Improve your career network</li>
-                <li>✅ Explore real-world software projects</li>
-                <li>✅ Get practical industry insights</li>
+                <li>Learn from experienced organizers and speakers</li>
+                <li>Meet people with similar interests</li>
+                <li>Build your professional network</li>
+                <li>Explore practical ideas and new opportunities</li>
               </ul>
             </div>
           </div>

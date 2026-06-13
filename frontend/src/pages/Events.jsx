@@ -1,69 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { DEFAULT_EVENT_IMAGE, events } from "../data/events";
 
-const events = [
-  {
-    id: 1,
-    title: "Tech Innovation Summit 2026",
-    category: "Technology",
-    date: "2026-06-15",
-    time: "09:30 AM",
-    location: "Colombo Grand Hall",
-    price: "LKR 2,500",
-    availableTickets: 300,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A technology event for students, developers, entrepreneurs, and startups to explore innovation and future trends.",
-  },
-  {
-    id: 2,
-    title: "Music Night Colombo",
-    category: "Music",
-    date: "2026-07-20",
-    time: "07:00 PM",
-    location: "Ocean View Conference Center",
-    price: "LKR 1,500",
-    availableTickets: 180,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A live music night featuring local artists, bands, and entertainment experiences near Colombo.",
-  },
-  {
-    id: 3,
-    title: "Startup Networking Meetup",
-    category: "Business",
-    date: "2026-08-10",
-    time: "04:00 PM",
-    location: "Lotus Event Arena",
-    price: "Free",
-    availableTickets: 120,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1515169067865-5387ec356754?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A networking meetup for startup founders, students, investors, designers, and software engineers.",
-  },
-  {
-    id: 4,
-    title: "Creative Design Workshop",
-    category: "Design",
-    date: "2026-09-05",
-    time: "10:00 AM",
-    location: "Royal Banquet Hall",
-    price: "LKR 3,000",
-    availableTickets: 75,
-    status: "Approved",
-    image:
-      "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80",
-    description:
-      "A practical design workshop covering UI/UX, branding, creative thinking, and portfolio improvement.",
-  },
-];
+const categoryOptions = [...new Set(events.map((event) => event.category))];
 
 function Events() {
+  const [searchText, setSearchText] = useState("");
+  const [locationText, setLocationText] = useState("");
+  const [category, setCategory] = useState("");
+
+  const filteredEvents = events.filter((event) => {
+    const titleMatches = event.title
+      .toLowerCase()
+      .includes(searchText.trim().toLowerCase());
+    const locationMatches = `${event.venue} ${event.location}`
+      .toLowerCase()
+      .includes(locationText.trim().toLowerCase());
+    const categoryMatches = category ? event.category === category : true;
+
+    return titleMatches && locationMatches && categoryMatches;
+  });
+
   return (
     <main className="bg-[#f8f9ff] min-h-screen">
       <section className="relative overflow-hidden px-6 lg:px-12 py-20">
@@ -88,24 +45,36 @@ function Events() {
 
           <div className="mt-10 bg-white rounded-3xl shadow-xl border border-slate-200 p-5 grid md:grid-cols-5 gap-4">
             <input
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
               className="md:col-span-2 px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Search event name"
             />
 
             <input
+              value={locationText}
+              onChange={(event) => setLocationText(event.target.value)}
               className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="Location"
+              placeholder="Location or venue"
             />
 
-            <select className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500">
-              <option>All Categories</option>
-              <option>Technology</option>
-              <option>Music</option>
-              <option>Business</option>
-              <option>Design</option>
+            <select
+              value={category}
+              onChange={(event) => setCategory(event.target.value)}
+              className="px-4 py-3 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="">All Categories</option>
+              {categoryOptions.map((eventCategory) => (
+                <option key={eventCategory} value={eventCategory}>
+                  {eventCategory}
+                </option>
+              ))}
             </select>
 
-            <button className="py-3 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-500 text-white font-bold shadow-md hover:opacity-90">
+            <button
+              type="button"
+              className="py-3 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-500 text-white font-bold shadow-md hover:opacity-90"
+            >
               Search
             </button>
           </div>
@@ -128,84 +97,108 @@ function Events() {
           </button>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition"
-            >
-              <div className="relative">
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="h-56 w-full object-cover"
-                />
+        {filteredEvents.length === 0 ? (
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-10 text-center">
+            <h3 className="text-2xl font-extrabold text-slate-950">
+              No events found.
+            </h3>
+            <p className="text-slate-500 mt-2">
+              Try another event name, venue, location, or category.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 items-stretch auto-rows-fr">
+            {filteredEvents.map((event) => (
+              <div key={event.id} className="h-full flex flex-col">
+                <article className="h-full flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition">
+                  <div className="relative shrink-0">
+                    <img
+                      src={event.image || DEFAULT_EVENT_IMAGE}
+                      alt={event.title}
+                      className="h-56 w-full object-cover"
+                      onError={(imageEvent) => {
+                        imageEvent.currentTarget.onerror = null;
+                        imageEvent.currentTarget.src = DEFAULT_EVENT_IMAGE;
+                      }}
+                    />
 
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
-                  {event.category}
-                </div>
+                    <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">
+                      {event.category}
+                    </div>
 
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
-                  {event.status}
-                </div>
+                    <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                      {event.status}
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex flex-col flex-1">
+                      <h3 className="text-xl font-extrabold text-slate-950">
+                        {event.title}
+                      </h3>
+
+                      <p className="text-slate-500 text-sm mt-2 leading-relaxed">
+                        {event.description}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
+                        <div className="bg-slate-50 rounded-2xl p-3">
+                          <p className="text-slate-400 font-semibold">Date</p>
+                          <p className="font-bold text-slate-700">
+                            {event.date}
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 rounded-2xl p-3">
+                          <p className="text-slate-400 font-semibold">Time</p>
+                          <p className="font-bold text-slate-700">
+                            {event.time}
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 rounded-2xl p-3">
+                          <p className="text-slate-400 font-semibold">Venue</p>
+                          <p className="font-bold text-slate-700">
+                            {event.venue}
+                          </p>
+                        </div>
+
+                        <div className="bg-slate-50 rounded-2xl p-3">
+                          <p className="text-slate-400 font-semibold">
+                            Tickets
+                          </p>
+                          <p className="font-bold text-slate-700">
+                            {event.availableTickets} left
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-auto">
+                        <div className="flex items-center justify-between gap-4 pt-6">
+                          <div>
+                            <p className="text-slate-400 text-sm font-semibold">
+                              Ticket Price
+                            </p>
+                            <p className="text-purple-700 font-extrabold">
+                              {event.price}
+                            </p>
+                          </div>
+
+                          <Link
+                            to={`/events/${event.id}`}
+                            className="shrink-0 px-5 py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800"
+                          >
+                            View Details
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
               </div>
-
-              <div className="p-6">
-                <h3 className="text-xl font-extrabold text-slate-950">
-                  {event.title}
-                </h3>
-
-                <p className="text-slate-500 text-sm mt-2 leading-relaxed">
-                  {event.description}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 mt-5 text-sm">
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Date</p>
-                    <p className="font-bold text-slate-700">{event.date}</p>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Time</p>
-                    <p className="font-bold text-slate-700">{event.time}</p>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Venue</p>
-                    <p className="font-bold text-slate-700">
-                      {event.location}
-                    </p>
-                  </div>
-
-                  <div className="bg-slate-50 rounded-2xl p-3">
-                    <p className="text-slate-400 font-semibold">Tickets</p>
-                    <p className="font-bold text-slate-700">
-                      {event.availableTickets} left
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-6">
-                  <div>
-                    <p className="text-slate-400 text-sm font-semibold">
-                      Ticket Price
-                    </p>
-                    <p className="text-purple-700 font-extrabold">
-                      {event.price}
-                    </p>
-                  </div>
-
-                  <Link
-                    to={`/events/${event.id}`}
-                    className="px-5 py-3 rounded-xl bg-purple-700 text-white font-bold hover:bg-purple-800"
-                  >
-                    Book Now
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
