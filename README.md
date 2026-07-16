@@ -43,6 +43,22 @@
 
 ---
 
+---
+
+# 🎥 Project Demonstration
+
+<p align="center">
+
+[![Watch EventHive Demo](https://img.youtube.com/vi/lehDRmZ7vig/maxresdefault.jpg)](https://youtu.be/lehDRmZ7vig)
+
+</p>
+
+<p align="center">
+Click the thumbnail above to watch the complete EventHive project demonstration.
+</p>
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
